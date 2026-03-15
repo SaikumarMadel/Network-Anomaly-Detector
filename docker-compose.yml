@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  generator:
+    build: ./generator
+    network_mode: host  # Allows sending real packets (run with caution)
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    command: python traffic_generator.py
+
+  detector:
+    build: ./detector
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ./data:/app/data  # For saving models if needed
+    command: python anomaly_detector.py
