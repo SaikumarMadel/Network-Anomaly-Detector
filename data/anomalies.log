@@ -1,0 +1,12 @@
+[2026-03-18 09:27:52] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [458, 194, 4] | Score: -0.59
+[2026-03-18 09:28:52] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [1644, 629, 4] | Score: -0.59
+[2026-03-18 09:32:22] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [263, 133, 3] | Score: -0.57
+[2026-03-18 15:45:21] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [1571, 602, 4] | Score: -0.59
+[2026-03-18 15:56:51] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [1656, 609, 4] | Score: -0.59
+[2026-03-18 23:24:33] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [272, 151, 3] | Score: -0.57
+[2026-03-18 23:31:03] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [270, 50, 2] | Score: -0.57
+[2026-03-18 23:33:03] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [254, 136, 2] | Score: -0.57
+[2026-03-18 23:38:03] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [270, 135, 3] | Score: -0.57
+[2026-03-18 23:42:34] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [240, 135, 2] | Score: -0.57
+[2026-03-18 23:47:34] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [268, 130, 3] | Score: -0.57
+[2026-03-19 00:02:04] ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [270, 160, 3] | Score: -0.57

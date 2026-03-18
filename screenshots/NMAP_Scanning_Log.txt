@@ -1,0 +1,73 @@
+
+Session started: 2026-03-18 14:56:50
+
+PS C:\Users\Asus> docker run --rm --network network-anomaly-sim_default instrumentisto/nmap -p 1-500 network-anomaly-sim-webserver-1
+Unable to find image 'instrumentisto/nmap:latest' locally
+latest: Pulling from instrumentisto/nmap
+78140f3b72aa: Pull complete
+1f90445fda13: Pull complete
+Digest: sha256:96f6ed194519b62421a1a1c57809e65a7f94d2aa1c8c25676f247e5e148c0827
+Status: Downloaded newer image for instrumentisto/nmap:latest
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-03-18 09:27 +0000
+Nmap scan report for network-anomaly-sim-webserver-1 (172.20.0.2)
+Host is up (0.000013s latency).
+rDNS record for 172.20.0.2: network-anomaly-sim-webserver-1.network-anomaly-sim_default
+Not shown: 499 closed tcp ports (reset)
+PORT   STATE SERVICE
+80/tcp open  http
+MAC Address: 9A:45:5E:78:CB:08 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 2.09 seconds
+
+PS C:\Users\Asus> for ($i=1; $i -le 5; $i++) { docker run --rm --network network-anomaly-sim_default instrumentisto/nmap -p 1-1000 -T5 network-anomaly-sim-webserver-1 }
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-03-18 09:28 +0000
+Nmap scan report for network-anomaly-sim-webserver-1 (172.20.0.2)
+Host is up (0.0000090s latency).
+rDNS record for 172.20.0.2: network-anomaly-sim-webserver-1.network-anomaly-sim_default
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+80/tcp open  http
+MAC Address: 9A:45:5E:78:CB:08 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.13 seconds
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-03-18 09:28 +0000
+Nmap scan report for network-anomaly-sim-webserver-1 (172.20.0.2)
+Host is up (0.000010s latency).
+rDNS record for 172.20.0.2: network-anomaly-sim-webserver-1.network-anomaly-sim_default
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+80/tcp open  http
+MAC Address: 9A:45:5E:78:CB:08 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.48 seconds
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-03-18 09:28 +0000
+Nmap scan report for network-anomaly-sim-webserver-1 (172.20.0.2)
+Host is up (0.000014s latency).
+rDNS record for 172.20.0.2: network-anomaly-sim-webserver-1.network-anomaly-sim_default
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+80/tcp open  http
+MAC Address: 9A:45:5E:78:CB:08 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.99 seconds
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-03-18 09:28 +0000
+Nmap scan report for network-anomaly-sim-webserver-1 (172.20.0.2)
+Host is up (0.000012s latency).
+rDNS record for 172.20.0.2: network-anomaly-sim-webserver-1.network-anomaly-sim_default
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+80/tcp open  http
+MAC Address: 9A:45:5E:78:CB:08 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.15 seconds
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-03-18 09:28 +0000
+Nmap scan report for network-anomaly-sim-webserver-1 (172.20.0.2)
+Host is up (0.000026s latency).
+rDNS record for 172.20.0.2: network-anomaly-sim-webserver-1.network-anomaly-sim_default
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+80/tcp open  http
+MAC Address: 9A:45:5E:78:CB:08 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.12 seconds
+PS C:\Users\Asus>

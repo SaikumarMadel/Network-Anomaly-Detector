@@ -1,0 +1,30 @@
+detector-1  |   File "/usr/local/lib/python3.11/site-packages/scapy/libs/winpcapy.py", line 40, in <module>
+detector-1  |     raise OSError("Cannot find libpcap.so library")
+detector-1  | OSError: Cannot find libpcap.so library
+detector-1  | 
+detector-1  | During handling of the above exception, another exception occurred:
+detector-1  | 
+detector-1  | Traceback (most recent call last):
+detector-1  |   File "/usr/local/lib/python3.11/site-packages/scapy/arch/linux/__init__.py", line 230, in __init__
+detector-1  |     attach_filter(self.ins, filter, self.iface)
+detector-1  |   File "/usr/local/lib/python3.11/site-packages/scapy/arch/linux/__init__.py", line 129, in attach_filter
+detector-1  |     bp = compile_filter(bpf_filter, iface)
+detector-1  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+detector-1  |   File "/usr/local/lib/python3.11/site-packages/scapy/arch/common.py", line 87, in compile_filter
+detector-1  |     raise ImportError(
+detector-1  | ImportError: libpcap is not available. Cannot compile filter !
+detector-1  | 
+detector-1  | During handling of the above exception, another exception occurred:
+detector-1  | 
+detector-1  | Traceback (most recent call last):
+detector-1  |   File "/app/anomaly_detector.py", line 36, in <module>
+detector-1  |     sniff_thread = sniff(prn=packet_callback, store=0, filter="tcp", timeout=0)
+detector-1  |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+detector-1  |   File "/usr/local/lib/python3.11/site-packages/scapy/sendrecv.py", line 1438, in sniff
+detector-1  |     sniffer._run(*args, **kwargs)
+detector-1  |   File "/usr/local/lib/python3.11/site-packages/scapy/sendrecv.py", line 1283, in _run
+detector-1  |     sniff_sockets[_RL2(iface)(type=ETH_P_ALL, iface=iface,
+detector-1  |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+detector-1  |   File "/usr/local/lib/python3.11/site-packages/scapy/arch/linux/__init__.py", line 232, in __init__
+detector-1  |     raise Scapy_Exception("Cannot set filter: %s" % ex)
+detector-1  | scapy.error.Scapy_Exception: Cannot set filter: libpcap is not available. Cannot compile filter !

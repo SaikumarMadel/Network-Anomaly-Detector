@@ -1,8 +1,21 @@
 version: '3.8'
+
 services:
+  webserver:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public:/usr/share/nginx/html
+    restart: always
+
   generator:
     build: ./generator
-    network_mode: host  # Allows sending real packets (run with caution)
+    depends_on:
+      - webserver
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Needs raw sockets to craft specific packets with Scapy
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -10,10 +23,17 @@ services:
 
   detector:
     build: ./detector
-    network_mode: host
+    # Attach directly to the webserver's network namespace (Sidecar Pattern)
+    network_mode: "service:webserver"
+    depends_on:
+      - webserver
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=Asia/Kolkata
     cap_add:
       - NET_ADMIN
       - NET_RAW
     volumes:
-      - ./data:/app/data  # For saving models if needed
+      - ./data:/app/data  # For saving models and logs
+      - ./public:/app/public # To write JSON dashboard file
     command: python anomaly_detector.py

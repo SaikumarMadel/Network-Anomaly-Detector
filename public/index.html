@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDS Dashboard | Network Anomaly Simulator</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --panel-bg: rgba(22, 27, 34, 0.7);
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent-blue: #58a6ff;
+            --alert-red: #f85149;
+            --ok-green: #3fb950;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at top right, #1f2937, transparent),
+                              radial-gradient(circle at bottom left, #111827, transparent);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px border var(--border-color);
+        }
+
+        h1 {
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background-color: rgba(63, 185, 80, 0.1);
+            color: var(--ok-green);
+            border: 1px solid rgba(63, 185, 80, 0.4);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+        }
+
+        .panel {
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            margin-top: 0;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-box {
+            background-color: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        tr.anomaly {
+            background-color: rgba(248, 81, 73, 0.05);
+            animation: pulse-red 2s infinite;
+        }
+        
+        tr.anomaly td {
+            color: var(--alert-red);
+        }
+
+        @keyframes pulse-red {
+            0% { background-color: rgba(248, 81, 73, 0.05); }
+            50% { background-color: rgba(248, 81, 73, 0.15); }
+            100% { background-color: rgba(248, 81, 73, 0.05); }
+        }
+
+        .badge-normal {
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        .badge-anomaly {
+            background: rgba(248, 81, 73, 0.1);
+            color: var(--alert-red);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            border: 1px solid var(--alert-red);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+            .stat-box[style*="grid-column"] {
+                grid-column: span 1 !important;
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                font-size: 0.8rem;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Intrusion Detection Dashboard</h1>
+        <div class="status-badge" id="ml-status">Initializing ML Pipeline...</div>
+    </header>
+
+    <div class="grid">
+        <div class="panel">
+            <h2>Current Traffic (Last 30s)</h2>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="val-requests">--</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="val-ports">--</div>
+                    <div class="stat-label">Unique Ports</div>
+                </div>
+                <div class="stat-box" style="grid-column: span 2;">
+                    <div class="stat-value" id="val-ips">--</div>
+                    <div class="stat-label">Unique Source IPs</div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;">
+                This dashboard dynamically reads from the <strong>Isolation Forest</strong> Machine Learning model. The Nginx server acts as a decoy target. When the system detects a burst of random port probes, the features matrix deviates from standard HTTP baselines, triggering an anomaly alert.
+            </p>
+
+            <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <h3 style="font-size: 0.9rem; color: var(--accent-blue); margin-top: 0; text-transform: uppercase; letter-spacing: 0.05em;">How it Works: Isolation Forest</h3>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 0.5rem;">
+                    Unlike traditional IDS that use known "signatures," this system uses <strong>unsupervised learning</strong> to isolate outliers.
+                </p>
+                <ul style="font-size: 0.8rem; color: var(--text-secondary); padding-left: 1.2rem; margin: 0;">
+                    <li style="margin-bottom: 0.4rem;"><strong>Isolation:</strong> Anomalies (like port scans) are rare and different, making them easier to "isolate" using fewer random partitions than normal data points.</li>
+                    <li><strong>No Labels Needed:</strong> The model learns the "normal" traffic shape automatically, allowing it to detect new, unknown attack patterns.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Detection Log</h2>
+            <table id="log-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Requests</th>
+                        <th>Ports</th>
+                        <th>IPs</th>
+                        <th>ML Score</th>
+                        <th>Classification</th>
+                    </tr>
+                </thead>
+                <tbody id="log-body">
+                    <tr><td colspan="6" class="empty-state">Waiting for traffic data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function updateDashboard() {
+            try {
+                const response = await fetch('data.json?t=' + new Date().getTime());
+                const data = await response.json();
+
+                // Update Status
+                const statusBadge = document.getElementById('ml-status');
+                if (data.status === 'training') {
+                    statusBadge.textContent = 'Collecting Baseline...';
+                    statusBadge.style.color = '#d2a8ff';
+                    statusBadge.style.borderColor = 'rgba(210, 168, 255, 0.4)';
+                    statusBadge.style.backgroundColor = 'rgba(210, 168, 255, 0.1)';
+                } else {
+                    statusBadge.textContent = 'Model Active & Monitoring';
+                    statusBadge.style.color = 'var(--ok-green)';
+                    statusBadge.style.borderColor = 'rgba(63, 185, 80, 0.4)';
+                    statusBadge.style.backgroundColor = 'rgba(63, 185, 80, 0.1)';
+                }
+
+                // Update Stats
+                if (data.current_window) {
+                    document.getElementById('val-requests').textContent = data.current_window.requests;
+                    document.getElementById('val-ports').textContent = data.current_window.unique_ports;
+                    document.getElementById('val-ips').textContent = data.current_window.unique_ips;
+                    
+                    if (data.current_window.is_anomaly) {
+                        document.getElementById('val-ports').style.color = 'var(--alert-red)';
+                    } else {
+                        document.getElementById('val-ports').style.color = 'var(--accent-blue)';
+                    }
+                }
+
+                // Update Logs
+                const logBody = document.getElementById('log-body');
+                if (data.logs && data.logs.length > 0) {
+                    logBody.innerHTML = '';
+                    // Reverse to show newest first
+                    [...data.logs].reverse().forEach(log => {
+                        const tr = document.createElement('tr');
+                        if (log.is_anomaly) tr.className = 'anomaly';
+                        
+                        tr.innerHTML = `
+                            <td>${log.timestamp}</td>
+                            <td>${log.features[0]}</td>
+                            <td>${log.features[1]}</td>
+                            <td>${log.features[2]}</td>
+                            <td>${log.score.toFixed(2)}</td>
+                            <td><span class="${log.is_anomaly ? 'badge-anomaly' : 'badge-normal'}">
+                                ${log.is_anomaly ? 'PORT SCAN' : 'NORMAL'}
+                            </span></td>
+                        `;
+                        logBody.appendChild(tr);
+                    });
+                }
+            } catch (err) {
+                console.error("Error fetching data:", err);
+            }
+        }
+
+        // Poll every 3 seconds
+        setInterval(updateDashboard, 3000);
+        updateDashboard();
+    </script>
+</body>
+</html>

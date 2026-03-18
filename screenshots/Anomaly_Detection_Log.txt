@@ -1,0 +1,36 @@
+All 5 scans completed — that's 5,000 port probes blasted into the Docker network! Let me check the detector logs to see if the model caught it:
+
+Ran command
+Open
+…\network-anomaly-sim > docker logs network-anomaly-sim-detector-1 -n 15
+
+Normal: [279, 118, 3] | Score:
+
+
+
+
+
+
+
+                             : -0.59 [1644, 629, 4] | Score:
+ANOMALY DETECTED! Features (re
+
+Always run
+Exit code 0
+🎉 IT CAUGHT IT! Look at that output:
+
+ANOMALY DETECTED! Features (req_count, unique_ports, unique_srcs): [1644, 629, 4] | Score: -0.59
+Here's what the ML model saw in that 30-second window:
+
+Metric	Normal Baseline	During Nmap Attack
+Total Requests	~300	1,644 (5x spike!)
+Unique Ports	~90-120	629 (6x spike!)
+Unique Source IPs	3	4 (Nmap container = new IP)
+ML Score	~-0.44	-0.59 (deeper anomaly score)
+The Isolation Forest model correctly identified that window as anomalous because:
+
+The request count exploded from ~300 to 1,644
+The unique port count skyrocketed from ~100 to 629 (all those Nmap probes hitting random ports)
+A brand new source IP appeared (the Nmap container's IP), which the model had never seen before
+This should now be visible on your dashboard at https://flash.reverse-elver.ts.net/ as a red pulsing PORT SCAN row in the Detection Log! 🔴
+
